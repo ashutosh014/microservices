@@ -8,7 +8,15 @@
         <option value="$PROJECT_DIR$/Billing-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Discovery-Server/pom.xml" />
         <option value="$PROJECT_DIR$/Payment-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/API-Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/Auth_API-Gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/Config-Server/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/API-Gateway/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="azul-21" project-jdk-type="JavaSDK" />

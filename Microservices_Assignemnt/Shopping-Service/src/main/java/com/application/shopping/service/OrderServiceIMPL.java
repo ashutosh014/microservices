@@ -137,16 +137,20 @@ public class OrderServiceIMPL implements OrderService{
             List<Product> productDetails =
                     cartService.getProductDetailsbyCartId(orderDetail.get().getCartID());
 
-            for(Product product : productDetails) {
-                Optional<Product> p = productService.getProductById(product.getId());
-                p.ifPresent(value -> productService.updateProductQuantity(value.getId(), (value.getQuantity() - product.getQuantity())));
-            }
+            // Update the product quantities
+            updateProductQuantities(productDetails);
             return !productDetails.isEmpty() ? productDetails : List.of();
         }
         return List.of();
     }
 
-
+    private void updateProductQuantities(List<Product> productDetails) {
+        for(Product product : productDetails) {
+            Optional<Product> productQuantity = productService.getProductById(product.getId());
+            productQuantity.ifPresent(value -> productService.updateProductQuantity(value.getId(), (value.getQuantity() - product.getQuantity())));
+            System.out.println("Updating the Product quantities");
+        }
+    }
 
 
     private InvoiceTemplate prepareInvoice(Order order) {

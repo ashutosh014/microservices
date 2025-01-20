@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface InvoiceInterface {
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<InvoiceTemplate>> getInvoiceById(@PathVariable Long id);
+    public Optional<InvoiceTemplate> getInvoiceById(@PathVariable Long id);
 
 }

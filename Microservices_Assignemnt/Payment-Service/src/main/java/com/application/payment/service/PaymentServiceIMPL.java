@@ -68,28 +68,37 @@ public class PaymentServiceIMPL implements PaymentService {
                 // Get the invoice details using the invoice_id in payment
                 Long orderId = getOrderIdFromInvoice(updatedPayment.getInvoiceId());
 
-                return "Done";
                 // Using the orderId from invoice detail get the cart details
-                /*List<Product> products = orderInterface.getProductDetailsByOrderId(orderId).getBody();
-                for(Product product : products) {
-                    System.out.println(product);
-                }*/
+                List<Product> products = orderInterface.getProductDetailsByOrderId(orderId).getBody();
+
+                System.out.println("Updating payment status as Processed");
+                paymentRepository.save(updatedPayment);
+
+                return "Payment Successful";
+
             }
 
-            //paymentRepository.save(updatedPayment);
-
-            return "Payment details updated";
+            if(paymentStatus.equalsIgnoreCase("CANCELLED")) {
+                // Check if the payment is already processed
+                // If yes cannot update an already processed payment
+                // If not update the status to CANCELLED
+                if(paymentDetails.get().getPaymentStatus() == PaymentStatus.PROCESSED) {
+                    return "Payment is already processed. Cannot update to CANCELLED";
+                }
+                else {
+                    updatedPayment.setPaymentStatus(PaymentStatus.CANCELLED);
+                    System.out.println("Updating payment status to CANCELLED");
+                    paymentRepository.save(updatedPayment);
+                    return "Payment Cancelled";
+                }
+            }
         }
         return "Unable to update payment details";
     }
 
 
     private Long getOrderIdFromInvoice(Long invoiceId) {
-        Optional<InvoiceTemplate> invoiceTemplate = invoiceInterface.getInvoiceById(invoiceId).getBody();
-        if (invoiceTemplate.isPresent()) {
-            return invoiceTemplate.get().getOrderId();
-        } else {
-            throw new IllegalArgumentException("Invoice not found for ID: " + invoiceId);
-        }
+        InvoiceTemplate invoiceTemplate = invoiceInterface.getInvoiceById(invoiceId).get();
+        return invoiceTemplate.getOrderId();
     }
 }

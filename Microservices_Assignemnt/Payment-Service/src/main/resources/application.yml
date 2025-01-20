@@ -2,12 +2,8 @@ spring:
   application:
     name: Payment-Service
 
-  jpa:
-    show-sql: true
-    database:
-      platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: update
+  config:
+    import: optional:configserver:http://localhost:8085
 
   datasource:
     url: jdbc:mysql://localhost:3306/payment_service
@@ -18,10 +14,4 @@ spring:
 server:
   port: 8083
 
-# Eureka
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka
-  register-with-eureka: true
-  fetch-registry: true
+

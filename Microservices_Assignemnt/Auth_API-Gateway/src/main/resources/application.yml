@@ -1,0 +1,73 @@
+spring:
+    application:
+      name: API-Gateway
+
+
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        cloud:
+          gateway:
+            RouteDefinitionLocator: INFO
+            gateway: TRACE
+
+  cloud:
+    gateway:
+      routes:
+        - id: SHOPPING-SERVICE
+          uri: http://localhost:8081
+          predicates:
+            - Path=/product/**
+            - Path=/product/**/**
+            - Path=/cart/**
+            - Path=/cart/**/**
+            - Path=/order/**/**
+
+        - id: BILLING-SERVICE
+          uri: http://localhost:8082
+          predicates:
+            - Path=/invoice/**
+            - Path=/invoice/**/**
+            - Path=/invoice/**/**/**
+
+        - id: Discovery-Server
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+
+        - id: Discovery-Server-static
+          uri: http://localhost:8761
+          predicates:
+            - Path=/eureka/**
+
+        - id: PAYMENT-SERVICE
+          uri: http://localhost:8083
+          predicates:
+            - Path=/payment/**
+            - Path=/payment/**/**
+
+okta:
+  oauth2:
+    issuer: https://dev-76776418.okta.com
+    audience: api://default
+    client-id: 0oampir1nzFAgDBD05d7
+    client-secret: zUIvVs84h9dmek3UXJo1iAgsqsZ8DG2b-x_GNZ5FN-yEfeZiIuQ2q6AiZxkr_ZUq
+    scope: openid, profile, email, offline_access
+
+
+
+server:
+  port: 8080
+
+# Eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+  register-with-eureka: true
+  fetch-registry: true
